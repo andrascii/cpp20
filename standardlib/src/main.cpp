@@ -2,6 +2,9 @@
 #include <variant>
 #include <iostream>
 #include <type_traits>
+#include <chrono>
+#include <date/date.h>
+#include <date/tz.h>
 
 struct DataSet1 {
   int value = 1;
@@ -61,6 +64,8 @@ template <typename ...Callbacks>
 CallbackPackage(Callbacks...) -> CallbackPackage<Callbacks...>;
 
 int main(int argc, char* argv[]) {
+  using namespace std::chrono_literals;
+
   (void)argc;
   (void)argv;
 
@@ -108,6 +113,18 @@ int main(int argc, char* argv[]) {
   std::cout << get<0>(tuple) << std::endl;
   std::cout << get<1>(tuple) << std::endl;
   std::cout << get<2>(tuple) << std::endl;
+
+  using namespace date;
+  using namespace std::chrono;
+
+  auto const current_time = system_clock::now();
+  auto const tz = make_zoned(locate_zone("Europe/Moscow"), current_time);
+  std::cout << "offset: " << tz.get_info().offset << std::endl;
+  std::cout << "msk: " << tz << std::endl;
+  std::cout << "utc: " << current_time << std::endl;
+  std::cout << "msk: " << tz.get_local_time().time_since_epoch().count() << std::endl;
+  std::cout << "utc: " << tz.get_sys_time().time_since_epoch().count() << std::endl;
+  std::cout << "utc: " << current_time.time_since_epoch().count() << std::endl;
 
   return 0;
 }

@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.2)
 set(CMAKE_SYSTEM_VERSION 7.0 CACHE STRING INTERNAL FORCE)
 set(CMAKE_CXX_STANDARD 20)
 
-project(${STANDARDLIB})
+set(THIS_TARGET ${PATTERNS})
+
+project(${THIS_TARGET})
 
 set(SOURCES_DIR src)
 set(HEADERS_DIR include)
@@ -19,7 +21,7 @@ endif()
 find_package(date CONFIG REQUIRED)
 
 add_executable(
-    ${STANDARDLIB}
+    ${THIS_TARGET}
     ${SOURCES_LIST}
     ${HEADERS_LIST}
 )
@@ -30,7 +32,7 @@ include_directories(
 )
 
 target_link_libraries(
-    ${STANDARDLIB}
+    ${THIS_TARGET}
     PRIVATE
     date::date
     date::date-tz
